@@ -1,0 +1,28 @@
+
+/*Index CSS*/
+input {
+}
+
+
+#signup {
+	margin: auto;
+
+}
+
+#login {
+	margin:auto;
+	height: 239.8px;
+}
+
+
+
+/*Homepage CSS*/
+header nav {
+  display: flex;
+  justify-content: flex-end;
+}
+
+header p {
+  padding: 0 20px;
+  margin: 0;
+}

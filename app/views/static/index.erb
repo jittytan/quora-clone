@@ -1,2 +1,38 @@
-<h1>Hello World</h1>
-<p>See Me in views/static/index.html.erb</p>
+<section class="jumbotron">
+    <div class="container">
+      <div class="row text-center">
+        <h1>Quora Clone</h1>
+        <h3>You question answered!</h3>
+      </div>
+    </div>
+  </section>
+
+<section class="container">
+	<div class="col-sm-3"></div>
+	<div id="signup" class="col-sm-3">
+	<h4>Sign up for an account!</h4>
+		<form method=post action=/signup>
+			<input type=text placeholder="User Name" name="user[user_name]"><br><br>
+		  <input type=text placeholder="Email" name="user[email]"><br><br>
+		  <input type=password placeholder="Password" name="user[password]"><br><br>
+		  <input type=submit value="Sign up">
+		</form>
+	<p class="indication">
+		<% if @flash_msg %>
+		<%= @flash_msg[:info] %>
+		<% end %></br>
+	</p>
+	</div>
+
+
+
+	<div id="login" class="col-sm-3">
+		<h4>Login</h4>
+		<form method=post action=/login>
+			<input type=text placeholder="Email" name="user[email]"><br><br>
+			<input type=password placeholder="Password" name="user[password]"><br><br>
+			<input type=submit value="Login">
+		</form>
+	</div>
+	<div class="col-sm-3"></div>
+</section>
