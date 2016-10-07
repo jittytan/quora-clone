@@ -12,15 +12,19 @@
 	<div id="signup" class="col-sm-3">
 	<h4>Sign up for an account!</h4>
 		<form method=post action=/signup>
-			<input type=text placeholder="User Name" name="user[user_name]"><br><br>
-		  <input type=text placeholder="Email" name="user[email]"><br><br>
-		  <input type=password placeholder="Password" name="user[password]"><br><br>
+			<input type=text placeholder="User Name" name="new_user[user_name]"><br><br>
+		  <input type=text placeholder="Email" name="new_user[email]"><br><br>
+		  <input type=password placeholder="Password" name="new_user[password]"><br><br>
 		  <input type=submit value="Sign up">
 		</form>
 	<p class="indication">
 		<% if @flash_msg %>
-		<%= @flash_msg[:info] %>
-		<% end %></br>
+		<% if @flash_msg.count == 1 %>
+		<%= @flash_msg[0] %>
+		<% elsif @flash_msg.count == 2 %>
+		<%= @flash_msg[0] %>
+		<%= @flash_msg[1] %>
+		<% end %><% end %></br>
 	</p>
 	</div>
 
@@ -33,6 +37,21 @@
 			<input type=password placeholder="Password" name="user[password]"><br><br>
 			<input type=submit value="Login">
 		</form>
+		<p class="indication">
+		<% if @msg %>
+		<%= @msg %>
+		<% end %></br>
+		<p>
 	</div>
 	<div class="col-sm-3"></div>
 </section>
+
+
+
+<!-- <form action="/question/question_id" method="post"> -->
+<!-- <input type="hidden" name"_method value="delete">-->
+<!-- <input type="submit" value="Delete"> -->
+
+<!-- <form action="/question/question_id" method="post"> -->
+<!-- <input typr="hidden" name="_method" method="put"> -->
+<!-- <input type="text" name="question[:description] -->

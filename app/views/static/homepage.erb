@@ -1,9 +1,23 @@
  <header class="container">
     <div class="row">
       <h1 class="col-sm-8">Quora Clone</h1>
-      <nav class="col-sm-4">
-     		<a href="/logout" method="post" action="/logout" >Log Out</a>
-        <a href="#">Profile</a>
+      <nav class="col-sm-4 text-center">
+
+      	<% if logged_in? == false %>
+      	<p><form method=get action=/>
+         <input type=submit value="Login/Signup">
+        </form></p>
+        
+        <% else %>
+        <p><form method=get action=/logout>
+         <input type=submit value="Logout">
+        </form></p>
+        
+        <p><form method=get action='/users/<%= current_user.id %>'>
+         <input type=submit value="Profile">
+        </form></p>
+        <% end %>
+
       </nav>
     </div>
   </header>
