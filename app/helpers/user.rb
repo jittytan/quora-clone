@@ -11,4 +11,13 @@ helpers do
   def logged_in?
     !current_user.nil?
   end
+
+  def answer_timestamp
+    if current_user.answer.find(params[:answer_id])
+    end
+
+  end
+
+
 end
+

@@ -1,0 +1,171 @@
+ <header class="container">
+    <div class="row">
+      <h2 class="col-md-8">Quora Clone</h2>
+      <nav class="col-md-4">
+
+      	<% if logged_in? == false %>
+      	<p><form method=get action=/>
+         <input type=submit value="Login/Signup">
+        </form></p>
+
+        <p><form method=get action=/homepage>
+        <input type=submit value="Home">
+        </form></p>
+        
+        <% else %>
+        <p><form method=get action=/logout>
+         <input type=submit value="Logout">
+        </form></p>
+        
+        <p><form method=get action='/users/<%= current_user.id %>'>
+         <input type=submit value="Profile">
+        </form></p>
+
+         <p><form method=get action=/homepage>
+        <input type=submit value="Home">
+        </form></p>
+        
+        <% end %>
+
+      </nav>
+    </div>
+  </header>
+
+
+<section class="container">
+	<h3>This is the Questions/Answers section</h3><br>
+
+	<div class="question">
+
+    <% if params[:answer_id] && params[:question_id] && params[:user_id] %>
+      <p> Coming Soon </p>
+
+    <% elsif params[:question_id] && params[:user_id] %>
+      <% d = Question.find(params[:question_id]) %>
+      <p>_______________________________________</p>
+      <h4><%= d.question_description %></h4>
+      <p class='footnote'>Posted by: <%= d.user.user_name %> at: <%= d.created_at %></p><br>
+
+      <% if logged_in? %>
+        <form method=post action='/questions/<%= d.id %>/answers'>
+        <input type=text placeholder="Answer here" name="answer">
+        <input type=submit value="Answer"></form>
+      <% end %>
+
+      <div class="answers">
+          <h4>Answers</h4>
+          <% if d.answers %>
+            <% d.answers.each_with_index do |e, index| %>
+              <p><%= index+1 %>. <%= e.answer_description %></p>
+              <p class='footnote'>  -- Answered by: <%= e.user.user_name %> at <%= e.created_at %> --</p><br>
+            <% end %>
+          <% end %>
+        </div>
+
+
+
+    <% elsif params[:user_id] %>
+
+      <%if @user_answer %> <!--  To make sure only that specific answer from that user is showned with the question, without the answers by other other user.   -->
+
+        <% current_user.answers.order("created_at DESC").each do |f| %>
+          <p>________________________________________________________</p>
+          <h5>Question: <%= Question.find(f.question_id).question_description %></h5>
+          <p>Your answer: <%= f.answer_description %></p>
+          <form method=get action=/answers/<%= f.id %>/edit>
+          <input type=submit value="Edit answer">
+          </form>
+        <% end %>
+
+
+      <% else %>
+        <% User.find(params[:user_id]).questions.order("created_at DESC").each do |a| %>
+          <p>__________________________________________________________</p>
+          <h4><%= a.question_description %></h4>
+          <p class='footnote'>Posted by: <%= a.user.user_name %> at <%= a.created_at %> updated at <%= a.updated_at %></p>
+
+          <% if logged_in? %>
+            <form method=get action='/questions/<%= current_user.id %>/edit'>
+            <input type=submit value="Edit question">
+            </form>
+
+            <form method=post action='/questions/<%= a.id %>/answers'>
+            <input type=text placeholder="Answer here" name="answer">
+            <input type=submit value="Answer"></form>
+          <% end %>
+
+          <div class="answers">
+            <h4>Answers</h4>
+            <% if a.answers %> 
+              <% a.answers.each_with_index do |b, index| %>
+                <p><%= index+1 %>. <%= b.answer_description %></p>
+                <p class='footnote'>  -- Answered by: <%= b.user.user_name %> at <%= b.created_at %> --</p><br>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+      
+
+
+    <% elsif params[:question_id] %>
+  		<% q = Question.find_by(id: params[:question_id]) %>
+      <p>_________________________________________________________________</p>
+  		<h4> <%= q.question_description %> </h4>
+  		<p class='footnote'>Posted by: <%= q.user.user_name %> at: <%= q.created_at %></p><br>
+
+      <% if @edit %> <!-- routing from edit -->
+        <form method=post action='/questions/<%= params[:question_id]%>'>
+        <input type="hidden" name="_method" value="put">
+        <input type=text placeholder="Edit your question here" name="edited_question">
+        <input type=submit value="Confirm">
+        </form>
+        <% end %>
+
+
+  		<% if logged_in? %>
+  		  <form method=post action='/questions/<%= q.id %>/answers'>
+  		  <input type=text placeholder="Answer here" name="answer">
+  		  <input type=submit value="Answer"></form>
+  	  <% end %>
+
+  		<div class="answers">
+  		  <h4>Answers</h4>
+  		  <% if q.answers %>
+  			  <% q.answers.each_with_index do |x, index| %>
+  				  <p><%= index+1 %>. <%= x.answer_description %></p>
+  				  <p class='footnote'>  -- Answered by: <%= x.user.user_name %> at <%= x.created_at %> --</p><br>
+  			  <% end %>
+  		  <% end %>
+  	  </div>
+
+
+    <% elsif params[:answer_id] %>
+      <% j = current_user.answers.find(params[:answer_id]) %>
+      <p> Question: <%= Question.find(j.question_id).question_description %></p>
+      <p> Your answer: <%= j.answer_description %></p>
+      <form method=post action="/answers/<%= params[:answer_id] %>">
+      <input type="hidden" name="_method" value="put">
+      <input type=text placeholder="Edit your answer here" name="edited_answer">
+      <input type=submit value="Confirm">
+      </form>
+
+
+
+
+    <% end %>
+  </div>
+ </section>
+
+
+
+
+
+
+
+
+
+
+
+</div>
+

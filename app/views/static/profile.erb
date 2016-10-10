@@ -1,8 +1,40 @@
-<h1> Hello, This is the Profile Page </h1><br>
 
-<form method=get action=/homepage>
-   <input type=submit value="Back">
-</form><br>
-<form method=get action=/logout>
-  <input type=submit value="Logout">
-</form>
+
+<header class="container">
+  <div class="row">
+    <h2 class="col-md-8">Quora Clone</h2>
+      <nav class="col-md-4">
+				<form method=get action=/homepage>
+				   <input type=submit value="Home">
+				</form>
+				<form method=get action=/logout>
+				  <input type=submit value="Logout">
+				</form>
+		  </nav>
+	</div>
+</header>
+
+
+
+
+<div>
+	<h3> Welcome, <%= current_user.user_name %>! This is your profile page! </h3><br>
+	<form method=post action=/questions>
+		<input type=text placeholder="Ask a question" name="question">
+	  <input type=submit value="Ask a question">
+	</form>
+</div>
+
+<div>
+	<h5>To see your questions:</h5>
+	<form method=get action=/users/<%= current_user.id %>/questions>
+		<input type=submit value="Your questions">
+	</form>
+</div>
+
+<div>
+	<h5>To see your answers given:</h5>
+	<form method=get action=/users/<%= current_user.id %>/answers>
+	<input type=submit value="Your answers">
+	</form>
+</div>

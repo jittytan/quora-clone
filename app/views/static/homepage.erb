@@ -1,7 +1,7 @@
  <header class="container">
     <div class="row">
-      <h1 class="col-sm-8">Quora Clone</h1>
-      <nav class="col-sm-4 text-center">
+      <h2 class="col-md-8">Quora Clone</h2>
+      <nav class="col-md-4">
 
       	<% if logged_in? == false %>
       	<p><form method=get action=/>
@@ -17,7 +17,65 @@
          <input type=submit value="Profile">
         </form></p>
         <% end %>
-
       </nav>
     </div>
   </header>
+
+
+  <section class="container">
+    <div class="row">
+      <div class="col-md-4"></div>
+
+
+        <div class="col-md-4">
+        
+        
+          <% Question.all.order("created_at DESC").each do |q| %>
+            <div class="question">
+              <p>___________________________________________</p>
+              <h4><%= q.question_description %></h4> 
+              <p class='footnote'>Posted by: <%= q.user.user_name %> at: <%= q.created_at %><br></p>
+
+              <% if current_user.question_votes.find_by(question_id: q.id, vote_type: true) == nil %>
+                <% @word = "UpVote" %>
+              <% else %>
+                <% @word = "RemoveVote" %>
+              <% end %>
+
+
+              <form id="upvote_form" method=post action=/up_votes/<%= q.id %>>
+                <div id="upvote_box"><input type=submit value=<%= @word %>></div>
+              </form>
+
+
+              <p id= "bla">Up Votes: <%= q.question_votes.where(vote_type: true).count %></p>
+
+              <p><form method=post action=/down_votes/<%= q.id %>>
+              <input type=submit <% if current_user.question_votes.find_by(question_id: q.id, vote_type: false) == nil %>
+                value="Down Vote" <% else %> value="Remove your Down Vote" <% end %>>
+              </form>Down Votes: <%= q.question_votes.where(vote_type: false).count %></p>
+
+              <form method=get action='/questions/<%= q.id %>'>
+              <input type=submit value="View question"></form>
+            </div>
+
+            <% if logged_in? %>
+              <form method=post action='/questions/<%= q.id %>/answers'>
+              <input type=text placeholder="Answer here" name="answer">
+              <input type=submit value="Answer"></form>
+            <% end %>
+
+            <div class="answers">
+              <h4>Answers</h4>
+              <% if q.answers %>
+                <% q.answers.each_with_index do |x, index| %>
+                  <p><%= index+1 %>. <%= x.answer_description %></p>
+                  <p class='footnote'>  -- Answered by: <%= x.user.user_name %> at <%= x.created_at %> --</p>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <div class="col-md-4"></div>
+    </div>
+  </section>

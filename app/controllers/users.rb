@@ -1,7 +1,4 @@
-get '/' do 
-	erb :"static/index"
 
-end
 
 get '/homepage' do 
 	erb :"static/homepage"
@@ -21,9 +18,10 @@ post '/signup' do
   user = User.new(user_name: params[:new_user][:user_name], email: params[:new_user][:email], password: params[:new_user][:password])
   user.save
   if user.save
+  	session[:user_id] = user.id
     redirect "/homepage" # what should happen if the user is save?
   else
-  	@flash_msg = user.errors.full_messages#{info: "Not successful"}
+  	@flash_msg = user.errors.full_messages
 		# return @flash_msg
 		erb :"static/index"
     # what should happen if the user keyed in invalid data?
@@ -54,8 +52,12 @@ post '/login' do
 end
 
 
-get '/users/:id' do
-	erb :"static/profile"
+get '/users/:user_id' do
+	if logged_in?
+		erb :"static/profile"
+	else
+		erb :"static/index"
+	end
 end
 
 
@@ -71,4 +73,12 @@ post '/logout' do
   # redirect to the appropriate page
 end
 
+
+get '/users/:user_id/questions' do
+	byebug
+	erb :"static/question"
+
+
+
+end
 

@@ -19,12 +19,10 @@
 		</form>
 	<p class="indication">
 		<% if @flash_msg %>
-		<% if @flash_msg.count == 1 %>
-		<%= @flash_msg[0] %>
-		<% elsif @flash_msg.count == 2 %>
-		<%= @flash_msg[0] %>
-		<%= @flash_msg[1] %>
-		<% end %><% end %></br>
+		<% @flash_msg.each do |x| %>
+		<%= x %><br>
+		<% end %>
+		<% end %><br>
 	</p>
 	</div>
 
