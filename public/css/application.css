@@ -1,5 +1,9 @@
+/*Index page*/
 
-
+#index {
+	background-color: darkslategrey;
+	color: honeydew;
+}
 
 
 /*Homepage CSS*/
@@ -14,7 +18,26 @@ header p {
 
 }
 
+.inline {
+	display: inline-block;
+}
+
+.question_link:hover {
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.answer_box {
+	width: 350px;
+	height: 100px;
+	box-sizing: border-box;
+	resize: none;
+
+
+}
+
 .footnote {
 	font-size: 12px;
 	color: grey;
 }
+

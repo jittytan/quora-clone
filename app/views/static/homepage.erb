@@ -1,81 +1,116 @@
- <header class="container">
-    <div class="row">
-      <h2 class="col-md-8">Quora Clone</h2>
-      <nav class="col-md-4">
-
-      	<% if logged_in? == false %>
-      	<p><form method=get action=/>
-         <input type=submit value="Login/Signup">
-        </form></p>
-        
-        <% else %>
-        <p><form method=get action=/logout>
-         <input type=submit value="Logout">
-        </form></p>
-        
-        <p><form method=get action='/users/<%= current_user.id %>'>
-         <input type=submit value="Profile">
-        </form></p>
-        <% end %>
-      </nav>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">Quora clone</a>
     </div>
-  </header>
+ <!--    <ul class="nav navbar-nav">
+      <li><a href="/logout">Home</a></li>
+      <li><a href="#">Page 1</a></li>
+      <li><a href="#">Page 2</a></li>
+    </ul> -->
+    <ul class="nav navbar-nav navbar-right">
+    <% if logged_in? %>
+      <li><a href="/users/<%= current_user.id %>"><span class="glyphicon glyphicon-user"> Profile</span></a>
+      <li><a href="/logout"><span class="glyphicon glyphicon-log-out"> Logout</span></a>
+    <% else %>
+      <li><a href="/"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+      <li><a href="/"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+    <% end %>
+    </ul>
+  </div>
+</nav>
 
 
-  <section class="container">
-    <div class="row">
-      <div class="col-md-4"></div>
+<section class="container">
+  <div class="row">
+    <div class="col-md-4"></div>
 
 
-        <div class="col-md-4">
-        
-        
-          <% Question.all.order("created_at DESC").each do |q| %>
-            <div class="question">
-              <p>___________________________________________</p>
-              <h4><%= q.question_description %></h4> 
-              <p class='footnote'>Posted by: <%= q.user.user_name %> at: <%= q.created_at %><br></p>
-
-              <% if current_user.question_votes.find_by(question_id: q.id, vote_type: true) == nil %>
-                <% @word = "UpVote" %>
-              <% else %>
-                <% @word = "RemoveVote" %>
-              <% end %>
-
-
-              <form id="upvote_form" method=post action=/up_votes/<%= q.id %>>
-                <div id="upvote_box"><input type=submit value=<%= @word %>></div>
-              </form>
-
-
-              <p id= "bla">Up Votes: <%= q.question_votes.where(vote_type: true).count %></p>
-
-              <p><form method=post action=/down_votes/<%= q.id %>>
-              <input type=submit <% if current_user.question_votes.find_by(question_id: q.id, vote_type: false) == nil %>
-                value="Down Vote" <% else %> value="Remove your Down Vote" <% end %>>
-              </form>Down Votes: <%= q.question_votes.where(vote_type: false).count %></p>
-
-              <form method=get action='/questions/<%= q.id %>'>
-              <input type=submit value="View question"></form>
-            </div>
+      <div class="col-md-4">
+      
+      
+        <% Question.all.order("created_at DESC").each do |q| %>
+          <div class="question">
+            <p>___________________________________________</p>
+            <h4><a class="question_link" href="/questions/<%= q.id %>"  ><%= q.question_description %></a></h4> 
+            <p class='footnote'>Posted by: <%= q.user.user_name %> at: <%= q.created_at %><br></p>
 
             <% if logged_in? %>
-              <form method=post action='/questions/<%= q.id %>/answers'>
-              <input type=text placeholder="Answer here" name="answer">
-              <input type=submit value="Answer"></form>
+              <% if current_user.question_votes.find_by(question_id: q.id, vote_type: true) == nil %>
+                <% @word = "Up vote" %>
+              <% else %>
+                <% @word = "Remove up vote" %>
+              <% end %>
+              
+              <div class="btn-group">
+                <span class="inline">
+                  <form class="upvote_form" method=post action=/questions/<%= q.id %>/up_vote>
+                    <span id="upvote_box_<%= q.id %>">
+                      <button type=submit class="btn btn-primary"><span class="glyphicon glyphicon-thumbs-up"> <%= @word %></span></button>
+                    </span>
+                  </form>
+                </span>
+
+                <% if logged_in? %>
+                  <% if current_user.question_votes.find_by(question_id: q.id, vote_type: false) == nil %>
+                    <% @downword = "Down Vote" %>
+                  <% else %>
+                    <% @downword = "Remove your Down Votes" %>
+                  <% end %>
+                <% end %>
+
+                <span class="inline">
+                  <form class="downvote_form" method=post action=/questions/<%= q.id %>/down_vote>
+                    <span id="downvote_box_<%= q.id %>">
+                      <button type=submit class="btn btn-primary">
+                        <span class="glyphicon glyphicon-thumbs-down"> <%= @downword %></span>
+                      </button>
+                    </span>
+                  </form>
+                </span>
+              </div>
+              <!-- <form class="upvote_form" method=post action=/up_votes/<%= q.id %>>
+                <span id="upvote_box_<%= q.id %>"><input type=submit value="<%= @word %>"></span>
+              </form>
+              <form method=post action=/down_votes/<%= q.id %>>
+                <input type=submit < if current_user.question_votes.find_by(question_id: q.id, vote_type: false) == nil %>
+                value="Down Vote" < else %> value="Remove your Down Vote" < end %>>
+              </form> -->
+              <p><span id="bla_<%= q.id %>">Up Votes: <%= q.question_votes.where(vote_type: true).count %></span>
+                <span id="dvt_<%= q.id %>"> | Down Votes: <%= q.question_votes.where(vote_type: false).count %></span>
+              </p>
+              <!-- No need form anymore as I linked the url directly form the question -->
+             <!--  <form method=get action='/questions/<%= q.id %>'>
+              <input type=submit value="View question"></form> -->
+              </div>
             <% end %>
 
-            <div class="answers">
-              <h4>Answers</h4>
-              <% if q.answers %>
-                <% q.answers.each_with_index do |x, index| %>
-                  <p><%= index+1 %>. <%= x.answer_description %></p>
-                  <p class='footnote'>  -- Answered by: <%= x.user.user_name %> at <%= x.created_at %> --</p>
-                <% end %>
-              <% end %>
-            </div>
+
+          <% if logged_in? %>
+            <form method=post action='/questions/<%= q.id %>/answers'>
+
+              <div class="form-group">
+              <label for="comment">Answer:</label>
+              <textarea class="form-control" rows="5" id="comment" name="answer" placeholder="Type your answer here" required></textarea>
+              </div>
+            <!-- <input  class="answer_box" type=text placeholder="Answer here" name="answer"> -->
+              <input type=submit value="submit">
+            </form>
           <% end %>
-        </div>
-      <div class="col-md-4"></div>
-    </div>
-  </section>
+
+          <div class="answers">
+            <h4>Answers</h4>
+            <% if q.answers %>
+              <% q.answers.each_with_index do |x, index| %>
+         
+                  <p class="answer"><%= index+1 %>. <%= x.answer_description %></p>
+             
+                <p class='footnote'>  -- Answered by: <%= x.user.user_name %> at <%= x.created_at %> --</p>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <div class="col-md-4"></div>
+  </div>
+</section>

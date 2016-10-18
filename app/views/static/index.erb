@@ -1,4 +1,4 @@
-<section class="jumbotron">
+<section id="index" class="jumbotron">
     <div class="container">
       <div class="row text-center">
         <h1>Quora Clone</h1>
@@ -20,7 +20,7 @@
 	<p class="indication">
 		<% if @flash_msg %>
 		<% @flash_msg.each do |x| %>
-		<%= x %><br>
+		<p class="text-danger"><%= x %></p>
 		<% end %>
 		<% end %><br>
 	</p>
@@ -37,7 +37,7 @@
 		</form>
 		<p class="indication">
 		<% if @msg %>
-		<%= @msg %>
+		<p class="text-danger"><%= @msg %></p>
 		<% end %></br>
 		<p>
 	</div>
